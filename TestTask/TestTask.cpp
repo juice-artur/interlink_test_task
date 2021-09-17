@@ -43,5 +43,14 @@ int main()
             employees[ss[0]].push_back({ ss[1], ss[2] });
         }
     }
+
+    std::fstream fout;
+    fout.open("reportcard.csv", std::ios::out);
+    std::vector<std::string> vints;
+    for (auto const& imap : employees)
+        vints.push_back(imap.first);
+    std::vector<DateAndHour> date = employees[vints[0]];
+    std::cout << "f";
+    //fout << employees
 }
 
