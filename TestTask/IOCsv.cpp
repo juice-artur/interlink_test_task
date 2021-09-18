@@ -2,6 +2,8 @@
 
 IOCsv::IOCsv(std::string inputPath, std::string outputPath)
 {
+    ReadCsv(inputPath);
+    WriteCsv(outputPath);
 }
 
 std::vector<std::string> IOCsv::split(std::string s, std::string delimiter)

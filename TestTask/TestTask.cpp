@@ -8,7 +8,6 @@
 
 int main()
 {
-//    std::ifstream csv_reader("acme_worksheet.csv");
 	IOCsv csv("acme_worksheet.csv", "file.csv");
 }
 
