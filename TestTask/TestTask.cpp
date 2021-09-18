@@ -39,27 +39,30 @@ int main()
         while (getline(csv_reader, line))
         {
             ss.clear();
-            //std::cout << line << std::endl;
             ss = split(line, ",");
             if (ss[1] != dateList.back()) 
             {
                 dateList.push_back(ss[1]);
             } 
+
             employees[ss[0]].push_back({ ss[1], ss[2] });
         }
     }
     dateList.erase(dateList.begin(), dateList.begin() + 2);
 
+
+
+
     std::fstream fout;
     fout.open("reportcard.csv", std::ios::out);
-    std::vector<std::string> vints;
+    std::vector<std::string> all_names;
     for (auto const& imap : employees)
-        vints.push_back(imap.first);
+        all_names.push_back(imap.first);
     fout << "Name/Date" << ",";
     std::cout << "Name/Date" << ",";
     for (auto const& imap : dateList) 
     {
-        //fout << imap << ",";
+
         if (dateList.back() == imap)
         {
             fout << imap;
@@ -74,32 +77,62 @@ int main()
 
     fout << "\n";
     std::cout << "\n";
-    for(auto const& imap : vints)
+    for(auto const& imap : all_names)
     {
         fout << imap << ",";
         std::cout << imap << ",";
         std::vector<DateAndHour> date = employees[imap];
         int count = 0;
+        int ff = 0;
         for (auto const& i : dateList)
         {
             for(auto const& j : date)
             {
-                if ( i == j.date)
+                auto pred = [i](const DateAndHour& item) {
+                    return item.date == i;
+                };
+                auto q = std::find_if(std::begin(date), std::end(date), pred) != std::end(date);
+                if (q)
                 {
-                    if (count < dateList.size() - 1)
+                    if (i == j.date)
                     {
-                        fout << j.hour << ",";
-                        std::cout << j.hour << ",";
-                        count++;
+                        if (count < dateList.size() - 1)
+                        {
+                            fout << j.hour << ",";
+                            std::cout << j.hour << ",";
+                            count++;
+                        }
+                        else
+                        {
+                            fout << j.hour;
+                            std::cout << j.hour;
+                        }
                     }
-                    else
+                }
+                else
+                {
+                    //auto iter = date.cbegin();
+                    DateAndHour dh{ i, "0" };
+                    //date.emplace(date.cbegin() + count,dh);
+                    date.push_back(dh);
+                    if (i != j.date)
                     {
-                        fout << j.hour;
-                        std::cout << j.hour;
+                        if (count < dateList.size() - 1)
+                        {
+                            fout << 0 << ",";
+                            std::cout << 0 << ",";
+                            count++;
+                        }
+                        else
+                        {
+                            fout << 0;
+                            std::cout << 0;
+                        }
                     }
                 }
 
             }
+            ff = 0;
         }
         fout << "\n";
         std::cout << "\n";
