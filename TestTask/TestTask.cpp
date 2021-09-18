@@ -9,6 +9,8 @@ struct DateAndHour
     std::string hour;
 };
 
+
+
 std::vector<std::string> split(std::string s, std::string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     std::string token;
@@ -22,6 +24,28 @@ std::vector<std::string> split(std::string s, std::string delimiter) {
 
     res.push_back(s.substr(pos_start));
     return res;
+};
+
+std::string DateToNumber(std::string date) 
+{
+    std::map<std::string, std::string> months
+    {
+        { "Jan", "01" },
+        { "Feb", "02" },
+        { "Mar", "03" },
+        { "Apr", "04" },
+        { "May", "05" },
+        { "Jun", "06" },
+        { "Jul", "07"},
+        { "Aug", "08"},
+        { "Sep", "09" },
+        { "Oct", "10" },
+        { "Nov", "11" },
+        { "Dec", "12" }
+    };
+    std::vector<std::string> dd;
+    dd = split(date, " ");
+    return dd[2] + "-" + months[dd[0]] + "-" + dd[1];
 };
 
 
@@ -47,6 +71,7 @@ int main()
 
             employees[ss[0]].push_back({ ss[1], ss[2] });
         }
+        std::cout << DateToNumber(ss[1]);
     }
     dateList.erase(dateList.begin(), dateList.begin() + 2);
 
@@ -65,13 +90,13 @@ int main()
 
         if (dateList.back() == imap)
         {
-            fout << imap;
-            std::cout << imap;
+            fout << DateToNumber(imap);
+            std::cout << DateToNumber(imap);
         }
         else
         {
-            fout << imap << ",";
-            std::cout << imap << ",";
+            fout << DateToNumber(imap) << ",";
+            std::cout << DateToNumber(imap) << ",";
         }
     }
 
@@ -111,9 +136,7 @@ int main()
                 }
                 else
                 {
-                    //auto iter = date.cbegin();
                     DateAndHour dh{ i, "0" };
-                    //date.emplace(date.cbegin() + count,dh);
                     date.push_back(dh);
                     if (i != j.date)
                     {
