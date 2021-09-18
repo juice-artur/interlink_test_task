@@ -45,23 +45,32 @@ std::string IOCsv::DateToNumber(std::string date)
 void IOCsv::ReadCsv(std::string path)
 {
     dateList.resize(1);
-    csv_reader.open(path);
-    if (csv_reader.is_open())
-    {
-        std::vector<std::string> ss;
-        while (getline(csv_reader, line))
+    csv_reader.exceptions(std::ifstream::badbit);
+    try {
+        csv_reader.open(path);
+        if (csv_reader.is_open())
         {
-            ss.clear();
-            ss = split(line, ",");
-            if (ss[1] != dateList.back())
+            std::vector<std::string> ss;
+            while (getline(csv_reader, line))
             {
-                dateList.push_back(ss[1]);
-            }
+                ss.clear();
+                ss = split(line, ",");
+                if (ss[1] != dateList.back())
+                {
+                    dateList.push_back(ss[1]);
+                }
 
-            employees[ss[0]].push_back({ ss[1], ss[2] });
+                employees[ss[0]].push_back({ ss[1], ss[2] });
+            }
         }
+        dateList.erase(dateList.begin(), dateList.begin() + 2);
     }
-    dateList.erase(dateList.begin(), dateList.begin() + 2);
+    catch (const std::ifstream::failure& e) {
+        std::cout << "Exception opening/reading file"<<"\n" << e.what();
+    }
+
+    csv_reader.close();
+
 }
 
 void IOCsv::WriteCsv(std::string path)
