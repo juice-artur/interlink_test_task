@@ -39,7 +39,7 @@ int main()
         while (getline(csv_reader, line))
         {
             ss.clear();
-            std::cout << line << std::endl;
+            //std::cout << line << std::endl;
             ss = split(line, ",");
             if (ss[1] != dateList.back()) 
             {
@@ -56,21 +56,47 @@ int main()
     for (auto const& imap : employees)
         vints.push_back(imap.first);
     fout << "Name/Date" << ",";
-    for (auto const& imap : dateList)
-        fout << imap << ","; 
+    std::cout << "Name/Date" << ",";
+    for (auto const& imap : dateList) 
+    {
+        //fout << imap << ",";
+        if (dateList.back() == imap)
+        {
+            fout << imap;
+            std::cout << imap;
+        }
+        else
+        {
+            fout << imap << ",";
+            std::cout << imap << ",";
+        }
+    }
+
     fout << "\n";
+    std::cout << "\n";
     for(auto const& imap : vints)
     {
         fout << imap << ",";
-        std::cout << imap;
+        std::cout << imap << ",";
         std::vector<DateAndHour> date = employees[imap];
+        int count = 0;
         for (auto const& i : dateList)
         {
             for(auto const& j : date)
             {
                 if ( i == j.date)
                 {
-                    fout << j.hour <<",";
+                    if (count < dateList.size() - 1)
+                    {
+                        fout << j.hour << ",";
+                        std::cout << j.hour << ",";
+                        count++;
+                    }
+                    else
+                    {
+                        fout << j.hour;
+                        std::cout << j.hour;
+                    }
                 }
 
             }
